@@ -21,17 +21,32 @@ renderer.render(scene, camera);
 
 const geometry = new THREE.TorusKnotGeometry(10,3,16,100);
 //mesh standard: reacts to light
-//mesh basic: simply the vertices
-const material =  new THREE.MeshBasicMaterial({color:0xFF6347, wireframe: true});
+//mesh basic: simply the edges, no light source required
+const material =  new THREE.MeshStandardMaterial({color:0xCC8899});
 const torusKnot = new THREE.Mesh(geometry, material);
 
+//must add everything to the scene to be rendered
 scene.add(torusKnot);
+
+//add light source
+//point light emits in all directions, light a light bulb
+const pointLight = new THREE.PointLight(0xffffff);
+pointLight.position.set(20,20,20)
+scene.add(pointLight);
+
+//helpers can show the position of light source and display a grid
+const lightHelper = new THREE.PointLightHelper(pointLight);
+const gridHelper = new THREE.GridHelper(200, 50);
+scene.add(lightHelper, gridHelper);
 
 //continuous loop recursive function
 //updates scene constantly, re-renders
 function animate() {
   //tells the browser you want to perform an animation
   requestAnimationFrame(animate);
+
+  torusKnot.rotation.x += 0.001
+  torusKnot.rotation.y += 0.001
   renderer.render(scene, camera);
 }
 
