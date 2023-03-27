@@ -2,6 +2,8 @@ import './style.css';
 
 import * as THREE from 'three';
 
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+
 const scene = new THREE.Scene();
 
 //perspective camera mimics how the human eye sees things
@@ -34,10 +36,17 @@ const pointLight = new THREE.PointLight(0xffffff);
 pointLight.position.set(20,20,20)
 scene.add(pointLight);
 
+const ambientLight = new THREE.AmbientLight(0xfffff);
+scene.add(ambientLight);
+
 //helpers can show the position of light source and display a grid
 const lightHelper = new THREE.PointLightHelper(pointLight);
 const gridHelper = new THREE.GridHelper(200, 50);
 scene.add(lightHelper, gridHelper);
+
+//orbit controls allow you to move around intuitively with mouse controls
+//listens to dom events on the mouse and update camera position
+const controls = new OrbitControls(camera, renderer.domElement);
 
 //continuous loop recursive function
 //updates scene constantly, re-renders
@@ -47,6 +56,9 @@ function animate() {
 
   torusKnot.rotation.x += 0.001
   torusKnot.rotation.y += 0.001
+
+  controls.update();
+
   renderer.render(scene, camera);
 }
 
